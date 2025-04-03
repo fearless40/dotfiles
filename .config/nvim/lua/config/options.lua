@@ -20,7 +20,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.scrolloff = 4 -- number screen lines to keep above and below the cursor
-
+vim.opt.showmode = false
 
 vim.opt.cursorline = true
 
