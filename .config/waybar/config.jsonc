@@ -1,0 +1,33 @@
+{
+    "include": "~/.config/waybar/modules.jsonc",
+    "layer": "bottom",
+    //"mode": "dock",
+    "position": "top",
+    "height": 18,
+    //"passthrough": false,
+    //"ipc":true,
+    //"spacing": 3,
+    "reload_style_on_change": true,
+    "modules-left": [
+        "hyprland/workspaces",
+        "hyprland/window",
+    ],
+    "modules-center": [
+        "power-profiles-daemon",
+        "hyprland/scratchpad",
+        "clock",
+    ],
+    "modules-right": [
+        "tray",
+        "custom/notification",
+        "idle_inhibitor",
+        "network",
+        "bluetooth",
+        "pulseaudio",
+        "group/hardware",
+        "battery",
+        "backlight",
+    ],
+}
+
+
