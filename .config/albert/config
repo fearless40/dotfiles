@@ -1,0 +1,25 @@
+[General]
+frontend=widgetsboxmodel
+showTray=false
+telemetry=false
+
+[applications]
+enabled=true
+
+[calculator_qalculate]
+enabled=true
+
+[widgetsboxmodel]
+alwaysOnTop=true
+clearOnHide=true
+clientShadow=true
+darkTheme=Solarized Dark Blue
+displayScrollbar=false
+followCursor=true
+hideOnFocusLoss=true
+historySearch=true
+itemCount=5
+lightTheme=Solarized Dark Blue
+quitOnClose=false
+showCentered=true
+systemShadow=true

@@ -206,6 +206,7 @@ return {
 			bashls = {},
 			marksman = {},
 			clangd = {},
+			cmake = {},
 			-- gopls = {},
 			-- pyright = {},
 			-- rust_analyzer = {},

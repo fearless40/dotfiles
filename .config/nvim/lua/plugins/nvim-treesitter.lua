@@ -1,24 +1,22 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
 	build = ":TSUpdate",
-	config = function() 
+	config = function()
 		local configs = require("nvim-treesitter.configs")
 		configs.setup({
-			ensure_installed = {"cpp", "lua", "vim", "query", "vimdoc"},
+			ensure_installed = { "cpp", "lua", "vim", "query", "vimdoc", "hyprlang" },
 			sync_install = false,
 			highlight = { enable = true },
-			indent = {enable = true},
+			indent = { enable = true },
 			incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "<Enter>", -- set to `false` to disable one of the mappings
-      node_incremental = "<Enter>",
-      scope_incremental = false,
-      node_decremental = "<Backspace>",
-    },
-  },
+				enable = true,
+				keymaps = {
+					init_selection = "<Enter>", -- set to `false` to disable one of the mappings
+					node_incremental = "<Enter>",
+					scope_incremental = false,
+					node_decremental = "<Backspace>",
+				},
+			},
 		})
-	end
-	
-
+	end,
 }
