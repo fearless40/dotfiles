@@ -8,7 +8,19 @@ return {
 		},
 		cmake_build_directory = function()
 			local root, method = require("project_nvim.project").get_project_root()
-			return root .. "/build/${variant:buildType}"
+			if root ~= nil then
+				return root .. "/build/${variant:buildType}"
+			else
+				return "/build/${variant:buildType}"
+			end
+		end,
+		cwd = function()
+			local root, method = require("project_nvim.project").get_project_root()
+			if root ~= nil then
+				return root
+			else
+				return vim.uv.cwd()
+			end
 		end,
 	},
 }

@@ -6,7 +6,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH=$PATH:$HOME/.cargo/bin
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -110,7 +110,31 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
+
+# Github .dotfile command
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+
+# Directory commands
+alias ...='cd ../..'
+alias cd..='cd ..'
+alias ....='cd ../../../'
+alias nc='cd ~/.config/nvim/lua/'
+alias code='cd ~/projects/'
+alias hyprc='cd ~/.config/hypr/'
+
+# Edit commands
+alias zshrc='nvim ~/.zshrc'
+alias vim='nvim'
+alias cm='cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=true .'
+alias cb='cmake --build build' 
+
+
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+if [[ -v HYPRLAND_INSTANCE_SIGNATURE ]] then
+    # echo "hyprland running"
+else
+    hyprland
+fi
