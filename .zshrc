@@ -136,5 +136,6 @@ alias cb='cmake --build build'
 if [[ -v HYPRLAND_INSTANCE_SIGNATURE ]] then
     # echo "hyprland running"
 else
-    hyprland
+   ./check_dock.zsh 
+   hyprland
 fi
