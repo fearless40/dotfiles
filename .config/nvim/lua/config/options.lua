@@ -21,6 +21,7 @@ vim.opt.splitbelow = true
 vim.opt.scrolloff = 4 -- number screen lines to keep above and below the cursor
 vim.opt.showmode = false
 
+vim.opt.winborder = "rounded"
 vim.opt.cursorline = true
 vim.opt.termguicolors = true
 
