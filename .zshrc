@@ -128,7 +128,7 @@ alias vim='nvim'
 alias cm='cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=true .'
 alias cb='cmake --build build' 
 
-
+export EDITOR='nvim'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -137,5 +137,5 @@ if [[ -v HYPRLAND_INSTANCE_SIGNATURE ]] then
     # echo "hyprland running"
 else
    ./check_dock.zsh 
-   hyprland
+   start-hyprland
 fi
