@@ -10,6 +10,27 @@
 
 --###########
 
+local INTERNAL = "eDP-1"
+
+local function count_external_monitors()
+   local count = 0;
+   for _, monitor in ipairs(hl.get_monitors() or {}) do
+      if monitor.name ~= INTERNAL then
+         count = count + 1
+      end
+   end
+   return count
+end
+
+local function check_work_layout()
+   local countHp = 0;
+   for _, monitor in ipairs(hl.get_monitors() or {}) do
+      if monitor.description:match("^HP Inc. HP E27") then
+         countHp = countHp + 1
+      end
+   end
+   return countHp
+end
 
 function monitor_configure()
    hl.monitor({
@@ -19,63 +40,81 @@ function monitor_configure()
       scale    = "auto"
    })
 
+   if check_work_layout() == 3 then
+      -- disable the internal monitor and setup the other monitors
+      hl.workspace_rule({ workspace = "1", monitor = "desc:HP Inc. HP E27 G5 CNC415074V", default = true, persistent = true })
+      hl.workspace_rule({ workspace = "2", monitor = "desc:HP Inc. HP E27 G5 CNC4270P2D", default = true, persistent = true })
+      hl.workspace_rule({ workspace = "3", monitor = "desc:HP Inc. HP E27 G5 CNC41507D6", default = true, persistent = true })
 
+      hl.monitor({
+         output    = "desc:HP Inc. HP E27 G5 CNC415074V",
+         mode      = "preferred",
+         position  = "0x0",
+         scale     = 1,
+         transform = 0
+      })
 
+      hl.monitor({
+         output   = "desc:HP Inc. HP E27 G5 CNC4270P2D",
+         mode     = "preferred",
+         position = "1920x0",
+         scale    = 1
+      })
 
-   local monitors = hl.get_monitors()
-   local monitorCount = #monitors
-   hl.notification.create({ text = monitorCount, duration = 10000 })
-   local positionText = "0x0"
-   if monitorCount == 4 then
-      positionText = "4920x0"
+      hl.monitor({
+         output    = "desc:HP Inc. HP E27 G5 CNC41507D6",
+         mode      = "preferred",
+         position  = "3840x0",
+         scale     = 1,
+         transform = 3
+      })
+
+      hl.monitor({
+         output = INTERNAL,
+         disabled = true
+      })
+   else
+      hl.monitor({
+         output   = INTERNAL,
+         mode     = "preferred",
+         position = "auto",
+         scale    = "auto",
+         disabled = false
+      })
    end
 
+
+
+
+   -- local positionText = "0x0"
+   -- if monitorCount == 4 then
+   --    positionText = "4920x0"
+   -- end
+   --
    --if monitorCount == 4 then
-   hl.workspace_rule({ workspace = "1", monitor = "desc:HP Inc. HP E27 G5 CNC415074V", default = true, persistent = true })
-   hl.workspace_rule({ workspace = "2", monitor = "desc:HP Inc. HP E27 G5 CNC4270P2D", default = true, persistent = true })
-   hl.workspace_rule({ workspace = "3", monitor = "desc:HP Inc. HP E27 G5 CNC41507D6", default = true, persistent = true })
-   hl.workspace_rule({ workspace = "4", monitor = "eDP-1", default = true, persistent = true })
+
+   -- hl.workspace_rule({ workspace = "4", monitor = "eDP-1", default = true, persistent = true })
    --end
 
 
-   hl.monitor({
-      output   = "eDP-1",
-      mode     = "preferred",
-      position = positionText,
-      scale    = 1
-   })
-
-   hl.monitor({
-      output    = "desc:HP Inc. HP E27 G5 CNC415074V",
-      mode      = "preferred",
-      position  = "0x0",
-      scale     = 1,
-      transform = 0
-   })
-
-   hl.monitor({
-      output   = "desc:HP Inc. HP E27 G5 CNC4270P2D",
-      mode     = "preferred",
-      position = "1920x0",
-      scale    = 1
-   })
-
-   hl.monitor({
-      output    = "desc:HP Inc. HP E27 G5 CNC41507D6",
-      mode      = "preferred",
-      position  = "3840x0",
-      scale     = 1,
-      transform = 3
-   })
+   -- hl.monitor({
+   --    output   = "eDP-1",
+   --    mode     = "preferred",
+   --    position = positionText,
+   --    scale    = 1
+   -- })
+   --
 
 
    --if monitorCount == 4 then
-   hl.workspace_rule({ workspace = "1", monitor = "desc:HP Inc. HP E27 G5 CNC415074V" })
-   hl.workspace_rule({ workspace = "2", monitor = "desc:HP Inc. HP E27 G5 CNC4270P2D" })
-   hl.workspace_rule({ workspace = "3", monitor = "desc:HP Inc. HP E27 G5 CNC41507D6" })
-   hl.workspace_rule({ workspace = "4", monitor = "eDP-1", default = true })
-   --end
+   -- hl.workspace_rule({ workspace = "1", monitor = "desc:HP Inc. HP E27 G5 CNC415074V" })
+   -- hl.workspace_rule({ workspace = "2", monitor = "desc:HP Inc. HP E27 G5 CNC4270P2D" })
+   -- hl.workspace_rule({ workspace = "3", monitor = "desc:HP Inc. HP E27 G5 CNC41507D6" })
+   -- hl.workspace_rule({ workspace = "4", monitor = "eDP-1", default = true })
+   -- --end
 end
 
 hl.on("hyprland.start", monitor_configure)
 hl.on("config.reloaded", monitor_configure)
+hl.on("monitor.added", monitor_configure)
+hl.on("monitor.removed", monitor_configure)
