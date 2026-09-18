@@ -34,6 +34,8 @@ hl.bind(mainMod .. " + " .. "b", hl.dsp.exec_cmd(alias.browser))
 
 hl.bind(mainMod .. " + " .. "P", hl.dsp.window.pseudo())
 
+hl.bind(mainMod .. " + R ", hl.dsp.window.resize())
+
 -- dwindle
 
 hl.bind(mainMod .. " + " .. "SPACE", hl.dsp.exec_cmd("albert toggle"))
