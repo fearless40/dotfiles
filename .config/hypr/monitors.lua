@@ -86,7 +86,7 @@ function monitor_configure()
    elseif check_home_layout() == 1 then
       hl.monitor({
          output   = "desc:Samsung Electric Company Odyssey G85SB H1AK500000",
-         mode     = "preferred",
+         mode     = "3440x1440@119.96",
          position = "0x0",
          scale    = 1,
          vrr      = 1
