@@ -23,13 +23,23 @@ local function count_external_monitors()
 end
 
 local function check_work_layout()
-   local countHp = 0;
+   local countHp = 0
    for _, monitor in ipairs(hl.get_monitors() or {}) do
       if monitor.description:match("^HP Inc. HP E27") then
          countHp = countHp + 1
       end
    end
    return countHp
+end
+
+local function check_home_layout()
+   local countSamsung = 0;
+   for _, monitor in ipairs(hl.get_monitors() or {}) do
+      if monitor.description:match("^Samsung Electric Company Odyssey G85SB") then
+         countSamsung = countSamsung + 1
+      end
+   end
+   return countSamsung
 end
 
 function monitor_configure()
@@ -73,6 +83,22 @@ function monitor_configure()
          output = INTERNAL,
          disabled = true
       })
+   elseif check_home_layout() == 1 then
+      hl.monitor({
+         output   = "desc:Samsung Electric Company Odyssey G85SB H1AK500000",
+         mode     = "preferred",
+         position = "0x0",
+         scale    = 1,
+         vrr      = 1
+      });
+
+      hl.monitor({
+         output   = INTERNAL,
+         mode     = "preferred",
+         position = "3440x100",
+         scale    = "auto",
+         disabled = false
+      });
    else
       hl.monitor({
          output   = INTERNAL,
