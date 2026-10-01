@@ -77,7 +77,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -119,16 +119,17 @@ alias ...='cd ../..'
 alias cd..='cd ..'
 alias ....='cd ../../../'
 alias nc='cd ~/.config/nvim/lua/'
-alias code='cd ~/projects/'
+# alias code='cd ~/projects/'
 alias hyprc='cd ~/.config/hypr/'
 
 # Edit commands
 alias zshrc='nvim ~/.zshrc'
 alias vim='nvim'
-alias cm='cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=true .'
-alias cb='cmake --build build' 
+# alias cm='cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=true .'
+# alias cb='cmake --build build' 
 
 export EDITOR='nvim'
+export CMAKE_GENERATOR=Ninja
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -136,6 +137,75 @@ export EDITOR='nvim'
 if [[ -v HYPRLAND_INSTANCE_SIGNATURE ]] then
     # echo "hyprland running"
 else
-   ./check_dock.zsh 
+   # ./check_dock.zsh 
    start-hyprland
 fi
+
+
+cmake_builder() {
+    if [[ -z $1 ]]; then 
+        echo "Need to specify build or config as first option."
+        return 1
+    fi
+    
+    local CURRENT_DIR="$PWD"
+    local compiler=${2:-"gcc"}
+    local mode=${3:-"debug"}
+
+    # Loop upwards until we find CMakeLists.txt or hit the root directory (/)
+    while [[ ! -f "$CURRENT_DIR/CMakePresets.json" ]]; do
+        # If we hit the root directory and it's still not there, we give up
+        if [[ "$CURRENT_DIR" == "$HOME/projects" || "$CURRENT_DIR" == "/" ]]; then
+            echo "Error: CMakePresets.json not found in this or any parent directories."
+            return 1
+        fi
+        # Move up one level using zsh modifier (:h gets the "head" / parent path)
+        CURRENT_DIR="${CURRENT_DIR:h}"
+    done
+
+    # Optional: Automatically move into the discovered project root directory
+    cd "$CURRENT_DIR" || return 1
+
+    local preset="$compiler-$mode"
+
+    # Execute the exact CMake array structure cleanly
+    if [[ $1 == "build" ]]; then 
+        echo "Found project root. Running: cmake --build --preset $preset"
+        cmake --build --preset "$preset"
+    else
+        echo "Found project root. Running: cmake --preset $preset"
+        cmake --preset "$preset"
+    fi
+
+}
+cm() {
+    cmake_builder config $1 $2 
+}
+
+cb() {
+    cmake_builder build $1 $2 
+}
+
+
+code() {
+   local BASE_DIR="$HOME/projects/" 
+   local search_term="$1" 
+
+   if [ -z "$1" ]; then 
+      print "Moving to: $BASE_DIR" 
+      cd "$BASE_DIR"
+      return 0
+   fi
+
+   local -a DIRS=("$BASE_DIR"/$~search_term*(/N))
+
+   if (( ${#DIRS} > 1 )); then 
+      print "Multiple matching directories moving to $BASE_DIR. Matches are:  $DIRS"
+      cd "$BASE_DIR" 
+   else 
+      cd "${DIRS[1]}"
+   fi
+}
+
+
+
