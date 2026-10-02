@@ -108,34 +108,74 @@ local lsp_key_maps = {
         end,
         desc = "[L]sp [F]ormat the current buffer."
     },
+    {
+        "<leader>le",
+        function()
+            vim.diagnostic.open_float(0, { scope = "line" })
+        end,
+        desc = "[L]sp show [e]rror",
+    }
 }
+
+local helper_key_maps = {
+    {
+        "]e",
+        function()
+            vim.diagnostic.jump({
+                count = 1,
+                float = true,
+                severity = vim.diagnostic.severity.ERROR
+            })
+        end,
+        { desc = "Jump to next diagnostic error." }
+    },
+    {
+        "gl",
+        function()
+            vim.diagnostic.open_float()
+        end,
+        { desc = "Open floating diagnostic buffer" },
+    },
+    {
+        "-",
+        "<CMD>Oil --float<CR>",
+        { desc = "Open parent directory." },
+    },
+    {
+        "W",
+        "<CMD>write<CR>",
+        { desc = "Save even if w is W." },
+        "c",
+    }
+}
+
 
 
 local function set_keymaps(array_map, mode)
     mode = mode or "n"
-    for index, val in ipairs(array_map) do
-        vim.keymap.set(
-            mode,
-            val[1],
-            val[2],
-            val[3]
-        )
+    for _, val in ipairs(array_map) do
+        if #val == 4 then
+            vim.keymap.set(
+                val[4],
+                val[1],
+                val[2],
+                val[3])
+        else
+            vim.keymap.set(
+                mode,
+                val[1],
+                val[2],
+                val[3]
+            )
+        end
     end
 end
 
 set_keymaps(fzf_map)
 set_keymaps(lsp_key_maps)
+set_keymaps(helper_key_maps)
 
 
-
-vim.keymap.set("n", "-", "<CMD>Oil --float<CR>", { desc = "Open parent directory" })
-vim.keymap.set("n", "gl", function() vim.diagnostic.open_float() end, { desc = "Open VIM diagnostics in Float" })
--- vim.keymap.set("n", "<leader>cf", function() require("conform").format() end, { desc = "[C]ode [f]ormat the file" })
-
-vim.keymap.set("n", "<leader>le", function() vim.diagnostic.open_float(0, { scope = "line" }) end,
-    { desc = "[L]sp show [e]rror" })
-
-vim.keymap.set("c", "W", "<CMD>write<CR>", { desc = "Save even if w is W." })
 
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
