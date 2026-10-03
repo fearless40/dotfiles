@@ -38,6 +38,16 @@
 
 --###############
 
+    local hostnamehandle = io.popen("uname -n")
+    if hostnamehandle then 
+        local hostname = handle:read("*l"):gsub("%s+","")
+        handle:close()
+        if hostname == "archgamer" then 
+            hl.env("AQ_DRM_DEVICES", "/dev/dri/card1")
+        end
+    end 
+
+
 -- env = AQ_DRM_DEVICES,/dev/dri/card1:/dev/dri/card0
 
 -- source = env.conf -> requires manual conversion
